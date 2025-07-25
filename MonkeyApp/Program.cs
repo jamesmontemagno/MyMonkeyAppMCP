@@ -6,7 +6,8 @@ void ShowMenu()
     Console.WriteLine("1. List all monkeys");
     Console.WriteLine("2. Get details for a specific monkey");
     Console.WriteLine("3. Get a random monkey");
-    Console.WriteLine("4. Exit");
+    Console.WriteLine("4. Fun monkey fact of the day");
+    Console.WriteLine("5. Exit");
     Console.Write("Choose an option: ");
 }
 
@@ -17,6 +18,11 @@ void PrintAsciiMonkey()
     Console.WriteLine("(  V  )");
     Console.WriteLine("--m-m--");
 }
+
+// Display a fun fact on app start
+Console.WriteLine("Welcome to the Monkey App!");
+PrintAsciiMonkey();
+Console.WriteLine("🐵 Fun Monkey Fact: " + MonkeyFacts.GetRandomFact());
 
 while (true)
 {
@@ -59,6 +65,16 @@ while (true)
             }
             break;
         case "4":
+            PrintAsciiMonkey();
+            var fact = MonkeyFacts.GetRandomFact();
+            Console.WriteLine("🐵 Fun Monkey Fact: " + fact);
+            Console.WriteLine($"Facts shown: {MonkeyFacts.GetShownFactsCount()}/{MonkeyFacts.GetTotalFactsCount()}");
+            if (MonkeyFacts.GetShownFactsCount() == MonkeyFacts.GetTotalFactsCount())
+            {
+                Console.WriteLine("🎉 You've seen all the monkey facts! The cycle will restart with the next fact.");
+            }
+            break;
+        case "5":
             Console.WriteLine("Goodbye!");
             return;
         default:
