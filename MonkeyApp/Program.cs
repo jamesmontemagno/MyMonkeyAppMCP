@@ -1,6 +1,8 @@
 ﻿using MonkeyApp;
 
-void ShowMenu()
+await RunAsync();
+
+static void ShowMenu()
 {
     Console.WriteLine("\nMonkey App Menu:");
     Console.WriteLine("1. List all monkeys");
@@ -10,59 +12,61 @@ void ShowMenu()
     Console.Write("Choose an option: ");
 }
 
-void PrintAsciiMonkey()
+static async Task PrintAsciiMonkeyAsync(string imageUrl)
 {
-    Console.WriteLine("  //\\ ");
-    Console.WriteLine(" (o o)");
-    Console.WriteLine("(  V  )");
-    Console.WriteLine("--m-m--");
+    Console.WriteLine("Generating ASCII art from image...");
+    string asciiArt = await AsciiArtHelper.ConvertImageToAsciiAsync(imageUrl, 60);
+    Console.WriteLine(asciiArt);
 }
 
-while (true)
+static async Task RunAsync()
 {
-    ShowMenu();
-    var input = Console.ReadLine();
-    Console.WriteLine();
-    switch (input)
+    while (true)
     {
-        case "1":
-            Console.WriteLine("Monkeys:");
-            foreach (var m in MonkeyHelper.GetMonkeys())
-                Console.WriteLine("- " + m.Name);
-            break;
-        case "2":
-            Console.Write("Enter monkey name: ");
-            var name = Console.ReadLine();
-            var monkey = MonkeyHelper.GetMonkeyByName(name ?? "");
-            if (monkey != null)
-            {
-                PrintAsciiMonkey();
-                Console.WriteLine($"Name: {monkey.Name}\nLocation: {monkey.Location}\nDetails: {monkey.Details}\nPopulation: {monkey.Population}\nLat/Lon: {monkey.Latitude}, {monkey.Longitude}\nImage: {monkey.Image}");
-                Console.WriteLine($"Accessed: {MonkeyHelper.GetMonkeyAccessCount(monkey.Name)} times");
-            }
-            else
-            {
-                Console.WriteLine("Monkey not found.");
-            }
-            break;
-        case "3":
-            var randomMonkey = MonkeyHelper.GetRandomMonkey();
-            if (randomMonkey != null)
-            {
-                PrintAsciiMonkey();
-                Console.WriteLine($"Random Monkey: {randomMonkey.Name}\nLocation: {randomMonkey.Location}\nDetails: {randomMonkey.Details}\nPopulation: {randomMonkey.Population}\nLat/Lon: {randomMonkey.Latitude}, {randomMonkey.Longitude}\nImage: {randomMonkey.Image}");
-                Console.WriteLine($"Accessed: {MonkeyHelper.GetMonkeyAccessCount(randomMonkey.Name)} times");
-            }
-            else
-            {
-                Console.WriteLine("No monkeys available.");
-            }
-            break;
-        case "4":
-            Console.WriteLine("Goodbye!");
-            return;
-        default:
-            Console.WriteLine("Invalid option. Try again.");
-            break;
+        ShowMenu();
+        var input = Console.ReadLine();
+        Console.WriteLine();
+        switch (input)
+        {
+            case "1":
+                Console.WriteLine("Monkeys:");
+                foreach (var m in MonkeyHelper.GetMonkeys())
+                    Console.WriteLine("- " + m.Name);
+                break;
+            case "2":
+                Console.Write("Enter monkey name: ");
+                var name = Console.ReadLine();
+                var monkey = MonkeyHelper.GetMonkeyByName(name ?? "");
+                if (monkey != null)
+                {
+                    await PrintAsciiMonkeyAsync(monkey.Image);
+                    Console.WriteLine($"Name: {monkey.Name}\nLocation: {monkey.Location}\nDetails: {monkey.Details}\nPopulation: {monkey.Population}\nLat/Lon: {monkey.Latitude}, {monkey.Longitude}\nImage: {monkey.Image}");
+                    Console.WriteLine($"Accessed: {MonkeyHelper.GetMonkeyAccessCount(monkey.Name)} times");
+                }
+                else
+                {
+                    Console.WriteLine("Monkey not found.");
+                }
+                break;
+            case "3":
+                var randomMonkey = MonkeyHelper.GetRandomMonkey();
+                if (randomMonkey != null)
+                {
+                    await PrintAsciiMonkeyAsync(randomMonkey.Image);
+                    Console.WriteLine($"Random Monkey: {randomMonkey.Name}\nLocation: {randomMonkey.Location}\nDetails: {randomMonkey.Details}\nPopulation: {randomMonkey.Population}\nLat/Lon: {randomMonkey.Latitude}, {randomMonkey.Longitude}\nImage: {randomMonkey.Image}");
+                    Console.WriteLine($"Accessed: {MonkeyHelper.GetMonkeyAccessCount(randomMonkey.Name)} times");
+                }
+                else
+                {
+                    Console.WriteLine("No monkeys available.");
+                }
+                break;
+            case "4":
+                Console.WriteLine("Goodbye!");
+                return;
+            default:
+                Console.WriteLine("Invalid option. Try again.");
+                break;
+        }
     }
 }
