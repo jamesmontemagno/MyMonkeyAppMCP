@@ -6,7 +6,8 @@ void ShowMenu()
     Console.WriteLine("1. List all monkeys");
     Console.WriteLine("2. Get details for a specific monkey");
     Console.WriteLine("3. Get a random monkey");
-    Console.WriteLine("4. Exit");
+    Console.WriteLine("4. Search monkeys");
+    Console.WriteLine("5. Exit");
     Console.Write("Choose an option: ");
 }
 
@@ -59,6 +60,31 @@ while (true)
             }
             break;
         case "4":
+            Console.Write("Enter search term (name or location): ");
+            var searchTerm = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(searchTerm))
+            {
+                Console.WriteLine("Invalid search term.");
+                break;
+            }
+            
+            var matchingMonkeys = MonkeyHelper.GetMonkeys()
+                .Where(m => m.Name.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) || 
+                           m.Location.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+            
+            if (matchingMonkeys.Count > 0)
+            {
+                Console.WriteLine($"Found {matchingMonkeys.Count} matching monkey(s):");
+                foreach (var m in matchingMonkeys)
+                    Console.WriteLine("- " + m.Name);
+            }
+            else
+            {
+                Console.WriteLine("No monkeys found matching your search term.");
+            }
+            break;
+        case "5":
             Console.WriteLine("Goodbye!");
             return;
         default:
