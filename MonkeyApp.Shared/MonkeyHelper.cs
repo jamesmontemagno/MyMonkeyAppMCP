@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace MonkeyApp
+namespace MonkeyApp.Shared
 {
     public static class MonkeyHelper
     {
@@ -27,7 +27,7 @@ namespace MonkeyApp
             };
         }
 
-        public static Monkey GetRandomMonkey()
+        public static Monkey? GetRandomMonkey()
         {
             var monkeys = GetMonkeys();
             if (monkeys.Count == 0) return null;
@@ -57,6 +57,44 @@ namespace MonkeyApp
                     _monkeyAccessCount[monkey.Name] = 1;
             }
             return monkey;
+        }
+
+        public static List<Monkey> SearchMonkeys(string searchTerm)
+        {
+            if (string.IsNullOrWhiteSpace(searchTerm)) return GetMonkeys();
+            
+            searchTerm = searchTerm.ToLower();
+            return GetMonkeys().Where(m => 
+                m.Name.ToLower().Contains(searchTerm) || 
+                m.Location.ToLower().Contains(searchTerm)
+            ).ToList();
+        }
+
+        public static List<Monkey> GetTopMonkeys(int count = 3)
+        {
+            var allMonkeys = GetMonkeys();
+            return allMonkeys
+                .OrderByDescending(m => GetMonkeyAccessCount(m.Name))
+                .Take(count)
+                .ToList();
+        }
+
+        public static string GetMonkeyFactOfTheDay()
+        {
+            var facts = new List<string>
+            {
+                "Monkeys can live anywhere from 10 to 50 years depending on the species!",
+                "Some monkeys use tools like sticks to extract insects from tree bark.",
+                "Howler monkeys can be heard up to 3 miles away!",
+                "Japanese macaques are the only primates that bathe in hot springs.",
+                "Capuchin monkeys have been observed using medicinal plants to treat wounds.",
+                "A group of monkeys is called a 'troop' or 'barrel'.",
+                "Spider monkeys don't have thumbs, which makes them more agile when swinging.",
+                "The proboscis monkey's large nose helps amplify their calls through the forest."
+            };
+
+            var dayOfYear = DateTime.Now.DayOfYear;
+            return facts[dayOfYear % facts.Count];
         }
     }
 }

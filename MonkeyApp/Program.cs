@@ -1,4 +1,4 @@
-﻿using MonkeyApp;
+﻿using MonkeyApp.Shared;
 
 void ShowMenu()
 {
