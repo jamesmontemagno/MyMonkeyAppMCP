@@ -6,7 +6,8 @@ void ShowMenu()
     Console.WriteLine("1. List all monkeys");
     Console.WriteLine("2. Get details for a specific monkey");
     Console.WriteLine("3. Get a random monkey");
-    Console.WriteLine("4. Exit");
+    Console.WriteLine("4. Display most popular monkeys");
+    Console.WriteLine("5. Exit");
     Console.Write("Choose an option: ");
 }
 
@@ -59,6 +60,22 @@ while (true)
             }
             break;
         case "4":
+            Console.WriteLine("Top 3 Most Popular Monkeys:");
+            var topMonkeys = MonkeyHelper.GetTopMonkeysByAccessCount(3);
+            if (topMonkeys.Count == 0)
+            {
+                Console.WriteLine("No monkeys have been accessed yet. Try viewing some monkeys first!");
+            }
+            else
+            {
+                for (int i = 0; i < topMonkeys.Count; i++)
+                {
+                    var (topMonkey, accessCount) = topMonkeys[i];
+                    Console.WriteLine($"{i + 1}. {topMonkey.Name} - Accessed {accessCount} times");
+                }
+            }
+            break;
+        case "5":
             Console.WriteLine("Goodbye!");
             return;
         default:

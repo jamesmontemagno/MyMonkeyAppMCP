@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MonkeyApp
 {
@@ -57,6 +58,27 @@ namespace MonkeyApp
                     _monkeyAccessCount[monkey.Name] = 1;
             }
             return monkey;
+        }
+
+        public static List<(Monkey monkey, int accessCount)> GetTopMonkeysByAccessCount(int topCount = 3)
+        {
+            var allMonkeys = GetMonkeys();
+            var monkeysWithCounts = new List<(Monkey monkey, int accessCount)>();
+            
+            foreach (var monkey in allMonkeys)
+            {
+                var count = GetMonkeyAccessCount(monkey.Name);
+                if (count > 0) // Only include monkeys that have been accessed
+                {
+                    monkeysWithCounts.Add((monkey, count));
+                }
+            }
+            
+            return monkeysWithCounts
+                .OrderByDescending(x => x.accessCount)
+                .ThenBy(x => x.monkey.Name)
+                .Take(topCount)
+                .ToList();
         }
     }
 }
