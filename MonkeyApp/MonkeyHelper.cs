@@ -27,7 +27,7 @@ namespace MonkeyApp
             };
         }
 
-        public static Monkey GetRandomMonkey()
+        public static Monkey? GetRandomMonkey()
         {
             var monkeys = GetMonkeys();
             if (monkeys.Count == 0) return null;
